@@ -11,8 +11,9 @@
 capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowers = "abcdefghijklmnopqrstuvqxyz"
 numbers = "0123456789"
+special_chars = "!@#$%^&*()_-=[]{}|\;:',<.>/?`~"
 #length = 0
-all_chars = capitals + lowers + numbers
+all_chars = capitals + lowers + numbers + special_chars
 password = ""
 
 # Ask user how long they want their generated password to be.
@@ -26,7 +27,13 @@ else:
 
 # x = ord("A")
 # print(x)
+random_keys = input("Press random keys!!! ")
+
 for i in range(length):
-    pseudo_random = (ord(input("Press random keys!!! ")[0]) + i * 17) % len(all_chars)
+    rk = random_keys[i % len(random_keys)]
+    pseudo_random = (ord(rk) + i * 17) % len(all_chars)
     password += all_chars[pseudo_random]
-    print(password)
+else:
+    print(f"Your random password is: {password}")
+
+#Tp1[>Rdz@<
