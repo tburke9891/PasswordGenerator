@@ -25,7 +25,7 @@ seeds = []
 length = int(input("How long would you like your password? (Min:8 - Max:26) "))
 if length < 8:
     print("Password too short.")
-elif length < 26:
+elif length < 27:
     print("Password length accepted!")
 else:
     print("Password too long, how the fuck are you supposed to remember that?!")
@@ -36,8 +36,6 @@ for i in range(length):
     bag_of_seeds = (seed * (i + 2300000) + i * i) ^ (seed * (i % 5))
     number = bag_of_seeds % length
     seeds.append(number)
-else:
-    print(seeds)
 
 # x = ord("A") - ord will get the ASCII value of "A"
 
