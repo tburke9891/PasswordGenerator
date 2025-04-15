@@ -1,4 +1,3 @@
-#
 ######################################################################
 # Password Generator by The Bannon Brothers!!!!
 # Requirements:
@@ -10,6 +9,7 @@
 import secrets
 import string
 
+# function for all yes/no answers with the user input as the parameter
 def get_yes_no(prompt):
     while True:
         choice = input(prompt + " (y/n): ").strip().lower()
@@ -20,6 +20,7 @@ def get_yes_no(prompt):
         else:
             print("Please enter 'y' or 'n'.")
 
+# Generate the pasword with the user's input
 def generate_password(length, use_upper, use_lower, use_digits, use_special):
     if length < 6:
         raise ValueError("Password length must be at least 6 characters.")
