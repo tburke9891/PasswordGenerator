@@ -2,48 +2,64 @@
 ######################################################################
 # Password Generator by The Bannon Brothers!!!!
 # Requirements:
-#   1. Create simple string variables w/ 'A-Z' 'a-z' and '0-9'
-#   2. Min pass length: 8 / Max pass length: 26
-#
+#   Get all requirements from the user: length, uppercase, lowercase, digits, and special characters.
+#   Define a function for all yes/no input parameters
+#   Define a function to generate the password with the provided context
 ######################################################################
 
-import os     # Imports Operating System
+import secrets
+import string
 
-# Character sets for password generator
-capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-lowers = "abcdefghijklmnopqrstuvqxyz"
-numbers = "0123456789"
-special_chars = "!@#$%^&*()_-=[]{}|;:',<.>/?`~"
-#length = 0
-all_chars = capitals + lowers + numbers + special_chars
-password = ""
-t = os.times()
-seed = int((t.user + t.system + t.elapsed) * 8675309)
-seeds = []
+def get_yes_no(prompt):
+    while True:
+        choice = input(prompt + " (y/n): ").strip().lower()
+        if choice in ['y', 'yes']:
+            return True
+        elif choice in ['n', 'no']:
+            return False
+        else:
+            print("Please enter 'y' or 'n'.")
 
-# Ask user how long they want their generated password to be.
-length = int(input("How long would you like your password? (Min:8 - Max:26) "))
-if length < 8:
-    print("Password too short.")
-elif length < 27:
-    print("Password length accepted!")
-else:
-    print("Password too long, how the fuck are you supposed to remember that?!")
+def generate_password(length, use_upper, use_lower, use_digits, use_special):
+    if length < 6:
+        raise ValueError("Password length must be at least 6 characters.")
 
-seed = seed % length
+    char_pool = ""
+    password = []
 
-for i in range(length):
-    bag_of_seeds = (seed * (i + 2300000) + i * i) ^ (seed * (i % 5))
-    number = bag_of_seeds % length
-    seeds.append(number)
+    if use_lower:
+        char_pool += string.ascii_lowercase
+        password.append(secrets.choice(string.ascii_lowercase))
+    if use_upper:
+        char_pool += string.ascii_uppercase
+        password.append(secrets.choice(string.ascii_uppercase))
+    if use_digits:
+        char_pool += string.digits
+        password.append(secrets.choice(string.digits))
+    if use_special:
+        char_pool += string.punctuation
+        password.append(secrets.choice(string.punctuation))
 
-# x = ord("A") - ord will get the ASCII value of "A"
+    if not char_pool:
+        raise ValueError("You must select at least one character type.")
 
-random_keys = input("Press random keys!!! ")
-for i in range(length):
-    rk = random_keys[i % len(random_keys)]
-    pseudo_random = (ord(rk) + i * seeds[i]) % len(all_chars)
-    password += all_chars[pseudo_random]
-else:
-    print(f"Your random password is: {password}")
+    while len(password) < length:
+        password.append(secrets.choice(char_pool))
 
+    secrets.SystemRandom().shuffle(password)
+    return ''.join(password)
+
+# === Main Program ===
+try:
+    length = int(input("Enter desired password length: "))
+
+    use_lower = get_yes_no("Include lowercase letters?")
+    use_upper = get_yes_no("Include uppercase letters?")
+    use_digits = get_yes_no("Include digits?")
+    use_special = get_yes_no("Include special characters?")
+
+    password = generate_password(length, use_upper, use_lower, use_digits, use_special)
+    print("\nGenerated password:", password)
+
+except ValueError as e:
+    print("Error:", e)
